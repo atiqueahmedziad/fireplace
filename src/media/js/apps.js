@@ -113,10 +113,59 @@ define('apps',
         if (product.payment_required && !product.price) {
             reasons.push(gettext('not available for your region'));
         }
-        if (!product.isWebsite && !capabilities.webApps ||
-            (!capabilities.packagedWebApps && product.is_packaged) ||
-            !_.contains(product.device_types, device)) {
-            reasons.push(gettext('not available for your platform'));
+        if (!capabilities.webApps &&
+            !_.contains(product.device_types, 'firefoxos') &&
+            !_.contains(product.device_types, 'android-mobile') &&
+            !_.contains(product.device_types, 'android-tablet') &&
+            _.contains(product.device_types, 'desktop')) {
+            reasons.push(gettext('try this app on Firefox Desktop'));
+        }
+        if (!capabilities.firefoxAndroid &&
+            !_.contains(product.device_types, 'desktop') &&
+            !_.contains(product.device_types, 'firefoxos') &&
+            (_.contains(product.device_types, 'android-mobile') ||
+            _.contains(product.device_types, 'android-tablet'))) {
+            reasons.push(gettext('try this app on Android'));
+        }
+        if (!capabilities.firefoxOS &&
+            !_.contains(product.device_types, 'desktop') &&
+            !_.contains(product.device_types, 'android-mobile') &&
+            !_.contains(product.device_types, 'android-tablet') &&
+            _.contains(product.device_types, 'firefoxos')) {
+            reasons.push(gettext('try this app on Firefox OS'));
+        }
+        if (!capabilities.webApps &&
+            !capabilities.firefoxAndroid &&
+            _.contains(product.device_types, 'desktop') &&
+            (_.contains(product.device_types, 'android-mobile') ||
+            _.contains(product.device_types, 'android-tablet')) &&
+            !_.contains(product.device_types, 'firefoxos')) {
+            reasons.push(gettext('try this app on Desktop / Android'));
+        }
+        if (!capabilities.webApps &&
+            !capabilities.firefoxOS &&
+            !_.contains(product.device_types, 'android-mobile') &&
+            !_.contains(product.device_types, 'android-tablet') &&
+            _.contains(product.device_types, 'desktop') &&
+            _.contains(product.device_types, 'firefoxos')) {
+            reasons.push(gettext('try this app on Desktop / Firefox OS'));
+        }
+        if (!capabilities.firefoxAndroid &&
+            !capabilities.firefoxOS &&
+            !_.contains(product.device_types, 'desktop') &&
+            (_.contains(product.device_types, 'android-mobile') ||
+            _.contains(product.device_types, 'android-tablet')) &&
+            _.contains(product.device_types, 'firefoxos')) {
+            reasons.push(gettext('try this app on Firefox Android / Firefox OS'));
+        }
+        if (!capabilities.firefoxAndroid &&
+            !capabilities.firefoxOS &&
+            !capabilities.webApps &&
+            _.contains(product.device_types, 'desktop') &&
+            (_.contains(product.device_types, 'android-mobile') ||
+            _.contains(product.device_types, 'android-tablet')) &&
+            _.contains(product.device_types, 'firefoxos')) {
+            reasons.push(gettext('try this app on Firefox'));
         }
 
         product[COMPAT_REASONS] = reasons.length ? reasons : undefined;

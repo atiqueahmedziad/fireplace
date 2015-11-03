@@ -53,31 +53,101 @@ define('tests/unit/apps',
         }));
 
 
-        it('apps.incompat webapps',
+        it('apps.incompat android & firefoxos',
            h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
             var product = {
                 payment_required: true,
                 price: '1.00',
-                device_types: ['foo']
+                device_types: ['desktop']
             };
             var results = apps.incompat(product);
             assert(results);
             assert.equal(results.length, 1);
-            assert.equal(results[0], 'not available for your platform');
+            assert.equal(results[0], 'try this app on Firefox Desktop');
         }));
 
 
-        it('apps.incompat platform',
-           h.injector(mockCapabilities(true)).run(['apps'], function(apps) {
+        it('apps.incompat desktop & firefoxos',
+           h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
             var product = {
                 payment_required: true,
                 price: '1.00',
-                device_types: ['bar']
+                device_types: ['android-mobile', 'android-tablet']
             };
             var results = apps.incompat(product);
             assert(results);
             assert.equal(results.length, 1);
-            assert.equal(results[0], 'not available for your platform');
+            assert.equal(results[0], 'try this app on Android');
+        }));
+
+        
+        it('apps.incompat desktop & android',
+           h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
+            var product = {
+                payment_required: true,
+                price: '1.00',
+                device_types: ['firefoxos']
+            };
+            var results = apps.incompat(product);
+            assert(results);
+            assert.equal(results.length, 1);
+            assert.equal(results[0], 'try this app on Firefox OS');
+        }));
+
+
+        it('apps.incompat firefoxos',
+           h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
+            var product = {
+                payment_required: true,
+                price: '1.00',
+                device_types: ['desktop', 'android-mobile', 'android-tablet']
+            };
+            var results = apps.incompat(product);
+            assert(results);
+            assert.equal(results.length, 1);
+            assert.equal(results[0], 'try this app on Desktop / Android');
+        }));
+
+
+        it('apps.incompat desktop',
+           h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
+            var product = {
+                payment_required: true,
+                price: '1.00',
+                device_types: ['android-mobile', 'android-tablet', 'firefoxos']
+            };
+            var results = apps.incompat(product);
+            assert(results);
+            assert.equal(results.length, 1);
+            assert.equal(results[0], 'try this app on Firefox Android / Firefox OS');
+        }));
+
+
+        it('apps.incompat android',
+           h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
+            var product = {
+                payment_required: true,
+                price: '1.00',
+                device_types: ['desktop', 'firefoxos']
+            };
+            var results = apps.incompat(product);
+            assert(results);
+            assert.equal(results.length, 1);
+            assert.equal(results[0], 'try this app on Desktop / Firefox OS');
+        }));
+
+
+        it('apps.incompat none',
+           h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
+            var product = {
+                payment_required: true,
+                price: '1.00',
+                device_types: ['desktop', 'firefoxos', 'android-mobile', 'android-tablet']
+            };
+            var results = apps.incompat(product);
+            assert(results);
+            assert.equal(results.length, 1);
+            assert.equal(results[0], 'try this app on Firefox');
         }));
 
 
@@ -91,22 +161,6 @@ define('tests/unit/apps',
             assert(results);
             assert.equal(results.length, 1);
             assert.equal(results[0], 'not available for your region');
-        }));
-
-
-        it('apps.incompat platform and webapps',
-           h.injector(mockCapabilities(false)).run(['apps'], function(apps) {
-            var product = {
-                payment_required: true,
-                price: '1.00',
-                device_types: ['bar']
-            };
-            var results = apps.incompat(product);
-            assert(results);
-
-            // Only return the first one. Both don't make sense.
-            assert.equal(results.length, 1);
-            assert.equal(results[0], 'not available for your platform');
         }));
     });
 });
