@@ -41,11 +41,8 @@
 </mkt-prompt>
 {% endmacro %}
 
-<div class="main add-review">
+<div class="main add-review mobile-margined">
   {% if not settings.meowEnabled %}
-    <header class="secondary-header">
-      <h2>{{ _('Leave a Review') }}</h2>
-    </header>
   {% endif %}
   {{ review_prompt(slug) }}
 </div>

@@ -208,18 +208,19 @@ define('views/search',
             if (query) break;
         }
 
-        if (query) switch (queryParam) {
-            case 'author':
-                pageTypes += ' leaf';
-                utilsLocal.headerTitle(gettext('Developer Listing'));
-                break;
-            case 'q':
-                pageTypes += ' leaf';
-                utilsLocal.headerTitle(gettext('Search Results'));
-            }
-        else if (!settings.meowEnabled) {
-                pageTypes += ' leaf';
-           }
+        if (query && queryParam === 'author') {
+            pageTypes += ' leaf';
+            utilsLocal.headerTitle(gettext('Developer Listing'));
+        } else if (!settings.meowEnabled) {
+            pageTypes += ' leaf';
+        }
+
+        if (query && queryParam === 'q') {
+            pageTypes += ' leaf';
+            utilsLocal.headerTitle(gettext('Search Results'));
+        } else if (!settings.meowEnabled) {
+            pageTypes += ' leaf';
+        }        
 
         builder.z('type', pageTypes);
         builder.z('search', query);
