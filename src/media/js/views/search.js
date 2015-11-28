@@ -215,6 +215,13 @@ define('views/search',
             pageTypes += ' leaf';
         }
 
+        if (query && queryParam === 'full_q' || 'q') {
+            pageTypes += ' leaf';
+            utilsLocal.headerTitle(gettext('Search Results'));
+        } else if (!settings.meowEnabled) {
+            pageTypes += ' leaf';
+        }        
+
         builder.z('type', pageTypes);
         builder.z('search', query);
         builder.z('title', query || title);
